@@ -648,14 +648,14 @@
     </div>
     <div class="daily-arrow">→</div>
   </a>
-  <a class="daily-btn" href="https://claude.ai/new?q=Napisz+mi+hook+do+posta+na+FB+%E2%80%94+temat%3A+alkohol+funkcyjny+po+45.+Daj+mi+3+r%C3%B3%C5%BCne+wersje+hooka+%E2%80%94+wybior%C4%99+najlepszy.+Styl%3A+scroll-stopping%2C+bez+clickbait." target="_blank">
+  <div class="daily-btn" onclick="scrollToGenerator()" style="cursor:pointer;">
     <div class="daily-icon">✍</div>
     <div class="daily-text">
       <div class="daily-label">Napisz dzisiejszy post</div>
-      <div class="daily-sub">alkohol funkcyjny · Reel</div>
+      <div class="daily-sub">wpisz temat → generuj →</div>
     </div>
-    <div class="daily-arrow">→</div>
-  </a>
+    <div class="daily-arrow">↑</div>
+  </div>
   <a class="daily-btn" href="https://claude.ai/new?q=Podsumuj+mi+ten+tydzie%C5%84+w+projekcie+Transformacja+M%C4%99ska+45%2B+%E2%80%94+co+zosta%C5%82o+zrobione%2C+co+jest+zaleg%C5%82e%2C+i+co+powinienem+zrobi%C4%87+jutro+jako+priorytet+nr+1." target="_blank">
     <div class="daily-icon">📋</div>
     <div class="daily-text">
@@ -756,6 +756,11 @@
     closeModal();
     document.getElementById('c-name').value = '';
     document.getElementById('c-age').value = '';
+  }
+
+  function scrollToGenerator() {
+    document.getElementById('post-topic').focus();
+    document.getElementById('post-topic').scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   function setTopic(topic) {
