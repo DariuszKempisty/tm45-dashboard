@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TM45 — Master Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0e0f;
+    --bg2: #161618;
+    --bg3: #1e1e21;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #f0ede8;
+    --muted: rgba(240,237,232,0.45);
+    --accent: #d4a853;
+    --accent2: #e8c87a;
+    --blue: #4a90d9;
+    --green: #5ab87a;
+    --red: #d9604a;
+    --purple: #9b7fd4;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .logo-main {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  .logo-main span { color: var(--accent); }
+
+  .logo-sub {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .week-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 6px 14px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+  }
+
+  /* METRICS */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .metric {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metric::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+
+  .metric-label {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .metric-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .metric-sub {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 1.5rem;
+  }
+
+  .panel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg3);
+  }
+
+  .panel-title {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .tag {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    padding: 3px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  .tag-gold { background: rgba(212,168,83,0.15); color: var(--accent); border: 1px solid rgba(212,168,83,0.3); }
+  .tag-blue { background: rgba(74,144,217,0.15); color: var(--blue); border: 1px solid rgba(74,144,217,0.3); }
+  .tag-green { background: rgba(90,184,122,0.15); color: var(--green); border: 1px solid rgba(90,184,122,0.3); }
+  .tag-red { background: rgba(217,96,74,0.15); color: var(--red); border: 1px solid rgba(217,96,74,0.3); }
+  .tag-purple { background: rgba(155,127,212,0.15); color: var(--purple); border: 1px solid rgba(155,127,212,0.3); }
+
+  .panel-body { padding: 12px 0; }
+
+  /* AVATAR PANEL */
+  .avatar-bars { padding: 0 16px; margin-bottom: 12px; }
+
+  .bar-row { margin-bottom: 14px; }
+  .bar-label { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .bar-desc { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .bar-track { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 2px; background: var(--accent); }
+
+  .pillars { padding: 12px 16px; border-top: 1px solid var(--border); }
+  .pillars-label { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .pillar-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ptag {
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    border-radius: 2px;
+  }
+
+  /* CONTENT ROWS */
+  .content-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+    text-decoration: none;
+  }
+
+  .content-row:last-child { border-bottom: none; }
+  .content-row:hover { background: var(--bg3); }
+
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-done { background: var(--green); }
+  .dot-today { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+  .dot-plan { background: var(--border2); }
+
+  .row-info { flex: 1; min-width: 0; }
+  .row-day { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--muted); }
+  .row-topic { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .format-badge {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    padding: 2px 7px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* CRM ROWS */
+  .crm-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+    text-decoration: none;
+  }
+  .crm-row:last-child { border-bottom: none; }
+  .crm-row:hover { background: var(--bg3); }
+
+  .avatar-circle {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+  }
+  .av-gold { background: rgba(212,168,83,0.15); color: var(--accent); }
+  .av-blue { background: rgba(74,144,217,0.15); color: var(--blue); }
+  .av-green { background: rgba(90,184,122,0.15); color: var(--green); }
+  .av-purple { background: rgba(155,127,212,0.15); color: var(--purple); }
+
+  .crm-info { flex: 1; min-width: 0; }
+  .crm-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .crm-status { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+  /* ACTION BUTTON */
+  .action-btn {
+    display: block;
+    width: calc(100% - 32px);
+    margin: 10px 16px 6px;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 2px;
+    text-align: center;
+    transition: all 0.15s;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .action-btn:hover {
+    background: rgba(212,168,83,0.08);
+    border-color: var(--accent);
+  }
+
+  /* DAILY ACTIONS */
+  .daily { margin-top: 0; }
+
+  .daily-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .daily-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .daily-btn:hover {
+    border-color: var(--accent);
+    background: rgba(212,168,83,0.05);
+  }
+
+  .daily-btn.urgent {
+    border-color: rgba(217,96,74,0.4);
+  }
+
+  .daily-btn.urgent:hover {
+    border-color: var(--red);
+    background: rgba(217,96,74,0.05);
+  }
+
+  .daily-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .daily-text { flex: 1; }
+  .daily-label { font-size: 13px; font-weight: 600; }
+  .daily-sub { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 2px; }
+
+  .daily-arrow { color: var(--muted); font-size: 14px; }
+
+  /* SECTION DIVIDER */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 1.5rem 0 1rem;
+  }
+
+  .divider-label {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* EDIT MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 24px;
+    width: 90%;
+    max-width: 500px;
+  }
+
+  .modal h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+
+  .modal label {
+    display: block;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+
+  .modal input, .modal select {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    outline: none;
+  }
+
+  .modal input:focus, .modal select:focus {
+    border-color: var(--accent);
+  }
+
+  .modal select option { background: var(--bg3); }
+
+  .modal-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: flex-end;
+  }
+
+  .btn-cancel {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+  }
+
+  .btn-save {
+    padding: 8px 20px;
+    background: var(--accent);
+    border: none;
+    color: #000;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-main">Transformacja <span>Męska 45+</span></div>
+    <div class="logo-sub">Master Dashboard · System Operacyjny</div>
+  </div>
+  <div class="week-badge" id="week-label">Tydzień 1</div>
+</div>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="metric">
+    <div class="metric-label">Followersów</div>
+    <div class="metric-value" id="m-followers">3 300</div>
+    <div class="metric-sub">cel: 1000 mężczyzn 40+</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">DM w toku</div>
+    <div class="metric-value" id="m-dm">4</div>
+    <div class="metric-sub" id="m-dm-sub">2 czekają na follow-up</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">Przychód</div>
+    <div class="metric-value" id="m-revenue">0 zł</div>
+    <div class="metric-sub">cel: 1. klient w 30 dni</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">Posty (mies.)</div>
+    <div class="metric-value" id="m-posts">2 / 20</div>
+    <div class="metric-sub">dziś: ✍ draft</div>
+  </div>
+</div>
+
+<!-- MAIN GRID -->
+<div class="grid">
+
+  <!-- AVATAR -->
+  <div class="panel">
+    <div class="panel-head">
+      <span class="panel-title">Marka & Avatar</span>
+      <span class="tag tag-gold">Marek, 51 lat</span>
+    </div>
+    <div class="panel-body">
+      <div class="avatar-bars">
+        <div class="bar-row">
+          <div class="bar-label">Avatar 1 — 70%</div>
+          <div class="bar-desc">Zbudował wszystko. Nie wie po co.</div>
+          <div class="bar-track"><div class="bar-fill" style="width:70%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label" style="color:var(--blue)">Avatar 3 — 30%</div>
+          <div class="bar-desc">Zdrowotny impuls do zmiany</div>
+          <div class="bar-track"><div class="bar-fill" style="width:30%; background:var(--blue)"></div></div>
+        </div>
+      </div>
+      <div class="pillars">
+        <div class="pillars-label">Filary tonu</div>
+        <div class="pillar-tags">
+          <span class="ptag">Prawda</span>
+          <span class="ptag">Lustro</span>
+          <span class="ptag">Nadzieja</span>
+          <span class="ptag">Autentyczność</span>
+        </div>
+      </div>
+      <a class="action-btn" href="https://claude.ai/new?q=Wygeneruj+mi+nowy+post+FB+pod+Avatara+1+%E2%80%94+Marek+51+lat.+Styl%3A+refleksyjny%2C+kr%C3%B3tkie+zdania%2C+bez+motywacyjnego+tonu.+Struktura%3A+Hook+%E2%86%92+Lustro+%E2%86%92+Osobiste+%E2%86%92+Przemy%C5%9Blenie+%E2%86%92+Mi%C4%99kkie+CTA.+Temat%3A+" target="_blank">
+        ✍ Generuj post dla Marka →
+      </a>
+    </div>
+  </div>
+
+  <!-- CONTENT PLAN -->
+  <div class="panel">
+    <div class="panel-head">
+      <span class="panel-title">Content Plan</span>
+      <span class="tag tag-blue">Facebook</span>
+    </div>
+    <div class="panel-body">
+      <a class="content-row" href="https://claude.ai/new?q=Napisz+mi+post+FB+o+relacyjnym+dystansie+w+ma%C5%82%C5%BCe%C5%84stwie+%E2%80%94+dla+m%C4%99%C5%BCczyzny+po+45.+Styl%3A+spokojny%2C+konkretny%2C+bez+porad.+Zako%C5%84cz+mi%C4%99kkim+zaproszeniem+do+rozmowy+przez+DM." target="_blank">
+        <div class="dot dot-done"></div>
+        <div class="row-info">
+          <div class="row-day">Pon</div>
+          <div class="row-topic">Zawał kolegi jako punkt zwrotny</div>
+        </div>
+        <span class="format-badge tag-green">post</span>
+      </a>
+      <a class="content-row" href="https://claude.ai/new?q=Napisz+mi+post+FB+o+dystansie+w+ma%C5%82%C5%BCe%C5%84stwie.+Styl+jak+zawsze%3A+kr%C3%B3tkie+zdania%2C+bez+bullshitu.+Avatar+1." target="_blank">
+        <div class="dot dot-done"></div>
+        <div class="row-info">
+          <div class="row-day">Śr</div>
+          <div class="row-topic">Dystans w małżeństwie</div>
+        </div>
+        <span class="format-badge tag-green">post</span>
+      </a>
+      <a class="content-row" href="https://claude.ai/new?q=Napisz+mi+post+FB+na+dzi%C5%9B+%E2%80%94+temat%3A+Alkohol+funkcyjny+%E2%80%94+kiedy+wino+po+pracy+sta%C5%82o+si%C4%99+rytua%C5%82em.+Avatar+1%2C+styl+refleksyjny%2C+struktura+Hook+%E2%86%92+Lustro+%E2%86%92+Osobiste+%E2%86%92+Przemy%C5%9Blenie+%E2%86%92+CTA." target="_blank">
+        <div class="dot dot-today"></div>
+        <div class="row-info">
+          <div class="row-day">Dziś ←</div>
+          <div class="row-topic">Alkohol funkcyjny</div>
+        </div>
+        <span class="format-badge tag-gold">Reel</span>
+      </a>
+      <a class="content-row" href="https://claude.ai/new?q=Napisz+mi+post+FB+o+braku+energii+i+wypaleniu+po+45.+Avatar+1.+Styl%3A+refleksyjny%2C+kr%C3%B3tkie+zdania." target="_blank">
+        <div class="dot dot-plan"></div>
+        <div class="row-info">
+          <div class="row-day">Pt</div>
+          <div class="row-topic">Brak energii / wypalenie</div>
+        </div>
+        <span class="format-badge" style="background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border)">post</span>
+      </a>
+      <a class="content-row" href="https://claude.ai/new?q=Napisz+mi+post+FB+o+zdrowiu+po+45+%E2%80%94+cholesterol%2C+brzuch%2C+stres.+Avatar+3.+Konkretny%2C+bez+paniki." target="_blank">
+        <div class="dot dot-plan"></div>
+        <div class="row-info">
+          <div class="row-day">So</div>
+          <div class="row-topic">Zdrowie — cholesterol, brzuch</div>
+        </div>
+        <span class="format-badge" style="background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border)">post</span>
+      </a>
+      <a class="action-btn" href="https://claude.ai/new?q=Zaplanuj+mi+content+na+kolejne+2+tygodnie+na+Facebook+%E2%80%94+Transformacja+M%C4%99ska+45%2B.+Mix%3A+posty+tekstowe+i+tematy+na+Reels.+Podaj+w+formie+tabeli%3A+dzie%C5%84%2C+temat%2C+format." target="_blank">
+        📅 Zaplanuj kolejne 2 tygodnie →
+      </a>
+    </div>
+  </div>
+
+  <!-- CRM -->
+  <div class="panel">
+    <div class="panel-head">
+      <span class="panel-title">CRM — Pipeline DM</span>
+      <span class="tag tag-gold" id="crm-count">4 aktywne</span>
+    </div>
+    <div class="panel-body" id="crm-list">
+      <a class="crm-row" href="https://claude.ai/new?q=Napisz+mi+follow-up+DM+do+Krzysztofa+%2849+lat%2C+przedsi%C4%99biorca%29.+Kontakt+by%C5%82+ciep%C5%82y+%E2%80%94+klikn%C4%85%C5%82+posta+o+wypaleniu.+Nie+odpowiedzia%C5%82+od+4+dni.+Wiadomo%C5%9B%C4%87+2+z+9.+Styl+lu%C5%BAny%2C+bez+pitcha." target="_blank">
+        <div class="avatar-circle av-gold">KW</div>
+        <div class="crm-info">
+          <div class="crm-name">Krzysztof W.</div>
+          <div class="crm-status">4 dni milczenia · msg 2/9</div>
+        </div>
+        <span class="tag tag-gold" style="font-size:10px">follow-up</span>
+      </a>
+      <a class="crm-row" href="https://claude.ai/new?q=Napisz+mi+wiadomo%C5%9B%C4%87+do+Piotra+po+obejrzeniu+VSL+%E2%80%94+zainteresowany+programem+ale+m%C3%B3wi+%C5%BCe+musi+si%C4%99+zastanowi%C4%87.+Potrzebuj%C4%99+mi%C4%99kkiego+domkni%C4%99cia+bez+presji." target="_blank">
+        <div class="avatar-circle av-blue">PM</div>
+        <div class="crm-info">
+          <div class="crm-name">Piotr M.</div>
+          <div class="crm-status">po VSL · czeka na decyzję</div>
+        </div>
+        <span class="tag tag-blue" style="font-size:10px">VSL sent</span>
+      </a>
+      <a class="crm-row" href="https://claude.ai/new?q=Napisz+mi+wiadomo%C5%9B%C4%87+otwieraj%C4%85c%C4%85+do+Andrzeja+%E2%80%94+nowy+kontakt+z+LinkedIn%2C+52+lata%2C+manager.+Etap+1%3A+po%C5%82%C4%85czenie+bez+pitcha.+Luz%2C+bez+formalizmu." target="_blank">
+        <div class="avatar-circle av-green">AR</div>
+        <div class="crm-info">
+          <div class="crm-name">Andrzej R.</div>
+          <div class="crm-status">LinkedIn · nowy kontakt</div>
+        </div>
+        <span class="tag tag-green" style="font-size:10px">połączenie</span>
+      </a>
+      <a class="crm-row" href="https://claude.ai/new?q=Napisz+mi+zaproszenie+do+rozmowy+dla+Tomasza+%E2%80%94+gor%C4%85cy+lead%2C+lubi+moje+posty+od+3+tygodni%2C+skomentowa%C5%82+ostatni.+Zaproś+go+do+kr%C3%B3tkiej+rozmowy+20+min.+Bez+formalizmu." target="_blank">
+        <div class="avatar-circle av-purple">TK</div>
+        <div class="crm-info">
+          <div class="crm-name">Tomasz K.</div>
+          <div class="crm-status">gorący lead · lubi posty 3 tyg.</div>
+        </div>
+        <span class="tag tag-red" style="font-size:10px">→ rozmowa</span>
+      </a>
+      <button class="action-btn" onclick="openAddContact()">
+        + Dodaj kontakt
+      </button>
+      <a class="action-btn" href="https://claude.ai/new?q=Napisz+mi+skrypt+do+nagrania+VSL+%28max+2+min%2C+z+telefonu%29+do+wysy%C5%82ki+przez+DM.+Struktura%3A+transparentno%C5%9B%C4%87+%E2%86%92+oferta+%E2%86%92+dow%C3%B3d+%E2%86%92+proces+%E2%86%92+CTA.+Produkt%3A+Transformacja+M%C4%99ska+45%2B+12+tygodni." target="_blank">
+        🎥 Generuj skrypt VSL →
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<!-- DAILY ACTIONS -->
+<div class="divider">
+  <span class="divider-label">Rutyna dzienna</span>
+  <div class="divider-line"></div>
+</div>
+
+<div class="daily-grid daily">
+  <a class="daily-btn urgent" href="https://claude.ai/new?q=Napisz+mi+follow-up+do+Krzysztofa+W.+%E2%80%94+nie+odpowiedzia%C5%82+od+4+dni.+Wiadomo%C5%9B%C4%87+2+z+9.+Luz%2C+bez+presji%2C+mo%C5%BCe+nawi%C4%85zanie+do+jego+bran%C5%BCy+lub+kr%C3%B3tkie+pytanie." target="_blank">
+    <div class="daily-icon">🔥</div>
+    <div class="daily-text">
+      <div class="daily-label">Follow-up Krzysztof W.</div>
+      <div class="daily-sub">4 dni milczenia · msg 2/9 · pilne</div>
+    </div>
+    <div class="daily-arrow">→</div>
+  </a>
+  <a class="daily-btn" href="https://claude.ai/new?q=Znajd%C5%BA+mi+10+nowych+potencjalnych+kontakt%C3%B3w+do+cold+outreach+na+LinkedIn+lub+Facebook+%E2%80%94+m%C4%99%C5%BCczy%C5%BAni+45-58+lat%2C+Polska%2C+widoczno%C5%9B%C4%87+sukcesu+zawodowego+lub+przedsi%C4%99biorcy.+Podaj+kryteria+filtrowania." target="_blank">
+    <div class="daily-icon">🔍</div>
+    <div class="daily-text">
+      <div class="daily-label">Znajdź 10 nowych kontaktów</div>
+      <div class="daily-sub">LinkedIn / Facebook · outreach</div>
+    </div>
+    <div class="daily-arrow">→</div>
+  </a>
+  <a class="daily-btn" href="https://claude.ai/new?q=Napisz+mi+hook+do+posta+na+FB+%E2%80%94+temat%3A+alkohol+funkcyjny+po+45.+Daj+mi+3+r%C3%B3%C5%BCne+wersje+hooka+%E2%80%94+wybior%C4%99+najlepszy.+Styl%3A+scroll-stopping%2C+bez+clickbait." target="_blank">
+    <div class="daily-icon">✍</div>
+    <div class="daily-text">
+      <div class="daily-label">Napisz dzisiejszy post</div>
+      <div class="daily-sub">alkohol funkcyjny · Reel</div>
+    </div>
+    <div class="daily-arrow">→</div>
+  </a>
+  <a class="daily-btn" href="https://claude.ai/new?q=Podsumuj+mi+ten+tydzie%C5%84+w+projekcie+Transformacja+M%C4%99ska+45%2B+%E2%80%94+co+zosta%C5%82o+zrobione%2C+co+jest+zaleg%C5%82e%2C+i+co+powinienem+zrobi%C4%87+jutro+jako+priorytet+nr+1." target="_blank">
+    <div class="daily-icon">📋</div>
+    <div class="daily-text">
+      <div class="daily-label">Podsumowanie tygodnia</div>
+      <div class="daily-sub">co zrobione · co jutro</div>
+    </div>
+    <div class="daily-arrow">→</div>
+  </a>
+</div>
+
+<!-- ADD CONTACT MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3>+ Nowy kontakt CRM</h3>
+    <label>Imię i nazwisko (inicjały)</label>
+    <input type="text" id="c-name" placeholder="np. Marek K." />
+    <label>Wiek</label>
+    <input type="number" id="c-age" placeholder="np. 49" />
+    <label>Platforma</label>
+    <select id="c-platform">
+      <option>Facebook</option>
+      <option>LinkedIn</option>
+    </select>
+    <label>Etap</label>
+    <select id="c-stage">
+      <option value="połączenie">Połączenie</option>
+      <option value="Trojan Horse">Trojan Horse</option>
+      <option value="VSL sent">VSL wysłany</option>
+      <option value="follow-up">Follow-up</option>
+      <option value="→ rozmowa">Do rozmowy</option>
+    </select>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Anuluj</button>
+      <button class="btn-save" onclick="saveContact()">Zapisz</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Week counter
+  const startDate = new Date('2026-05-05');
+  const now = new Date();
+  const week = Math.max(1, Math.ceil((now - startDate) / (7 * 24 * 60 * 60 * 1000)));
+  document.getElementById('week-label').textContent = 'Tydzień ' + week;
+
+  // Load contacts from localStorage
+  let contacts = JSON.parse(localStorage.getItem('tm45_contacts') || '[]');
+
+  const colorMap = {
+    'połączenie': ['av-green', 'tag-green'],
+    'Trojan Horse': ['av-blue', 'tag-blue'],
+    'VSL sent': ['av-blue', 'tag-blue'],
+    'follow-up': ['av-gold', 'tag-gold'],
+    '→ rozmowa': ['av-purple', 'tag-red']
+  };
+
+  function renderContacts() {
+    const list = document.getElementById('crm-list');
+    const existing = list.querySelectorAll('.crm-row');
+    existing.forEach(r => r.remove());
+
+    contacts.forEach((c, i) => {
+      const [avClass, tagClass] = colorMap[c.stage] || ['av-gold', 'tag-gold'];
+      const initials = c.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+      const prompt = encodeURIComponent(`Napisz mi wiadomość do ${c.name} (${c.age} lat, ${c.platform}). Etap: ${c.stage}. Styl: luz, bez pitcha, konkretne.`);
+      const row = document.createElement('a');
+      row.className = 'crm-row';
+      row.href = `https://claude.ai/new?q=${prompt}`;
+      row.target = '_blank';
+      row.innerHTML = `
+        <div class="avatar-circle ${avClass}">${initials}</div>
+        <div class="crm-info">
+          <div class="crm-name">${c.name}</div>
+          <div class="crm-status">${c.platform} · ${c.stage}</div>
+        </div>
+        <span class="tag ${tagClass}" style="font-size:10px">${c.stage}</span>
+      `;
+      const addBtn = list.querySelector('.action-btn');
+      list.insertBefore(row, addBtn);
+    });
+
+    const total = 4 + contacts.length;
+    document.getElementById('crm-count').textContent = total + ' aktywne';
+  }
+
+  function openAddContact() { document.getElementById('modal').classList.add('open'); }
+  function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+  function saveContact() {
+    const name = document.getElementById('c-name').value.trim();
+    const age = document.getElementById('c-age').value;
+    const platform = document.getElementById('c-platform').value;
+    const stage = document.getElementById('c-stage').value;
+    if (!name) return;
+    contacts.push({ name, age, platform, stage });
+    localStorage.setItem('tm45_contacts', JSON.stringify(contacts));
+    renderContacts();
+    closeModal();
+    document.getElementById('c-name').value = '';
+    document.getElementById('c-age').value = '';
+  }
+
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  renderContacts();
+</script>
+</body>
+</html>
