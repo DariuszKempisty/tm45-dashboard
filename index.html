@@ -518,53 +518,60 @@
   <!-- CONTENT PLAN -->
   <div class="panel">
     <div class="panel-head">
-      <span class="panel-title">Content Plan</span>
+      <span class="panel-title">Generator Postów</span>
       <span class="tag tag-blue">Facebook</span>
     </div>
-    <div class="panel-body">
-      <a class="content-row" href="https://claude.ai/new?q=Napisz+mi+post+FB+o+relacyjnym+dystansie+w+ma%C5%82%C5%BCe%C5%84stwie+%E2%80%94+dla+m%C4%99%C5%BCczyzny+po+45.+Styl%3A+spokojny%2C+konkretny%2C+bez+porad.+Zako%C5%84cz+mi%C4%99kkim+zaproszeniem+do+rozmowy+przez+DM." target="_blank">
-        <div class="dot dot-done"></div>
-        <div class="row-info">
-          <div class="row-day">Pon</div>
-          <div class="row-topic">Zawał kolegi jako punkt zwrotny</div>
+    <div class="panel-body" style="padding: 12px 16px;">
+
+      <div style="margin-bottom: 10px;">
+        <div style="font-size: 10px; font-family: 'DM Mono', monospace; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px;">Temat posta</div>
+        <input type="text" id="post-topic" placeholder="np. samotność w małżeństwie..." style="width:100%; padding: 9px 12px; background: var(--bg3); border: 1px solid var(--border2); border-radius: 3px; color: var(--text); font-family: 'Syne', sans-serif; font-size: 13px; outline: none;" />
+      </div>
+
+      <div style="margin-bottom: 10px;">
+        <div style="font-size: 10px; font-family: 'DM Mono', monospace; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px;">Format</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+          <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer; padding: 7px 10px; border: 1px solid var(--border2); border-radius: 3px;">
+            <input type="radio" name="format" value="post" checked style="accent-color: var(--accent);"> Post tekstowy
+          </label>
+          <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer; padding: 7px 10px; border: 1px solid var(--border2); border-radius: 3px;">
+            <input type="radio" name="format" value="reel" style="accent-color: var(--accent);"> Reel (skrypt)
+          </label>
         </div>
-        <span class="format-badge tag-green">post</span>
-      </a>
-      <a class="content-row" href="https://claude.ai/new?q=Napisz+mi+post+FB+o+dystansie+w+ma%C5%82%C5%BCe%C5%84stwie.+Styl+jak+zawsze%3A+kr%C3%B3tkie+zdania%2C+bez+bullshitu.+Avatar+1." target="_blank">
-        <div class="dot dot-done"></div>
-        <div class="row-info">
-          <div class="row-day">Śr</div>
-          <div class="row-topic">Dystans w małżeństwie</div>
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <div style="font-size: 10px; font-family: 'DM Mono', monospace; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px;">Avatar</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+          <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer; padding: 7px 10px; border: 1px solid var(--border2); border-radius: 3px;">
+            <input type="radio" name="avatar" value="1" checked style="accent-color: var(--accent);"> Avatar 1 (pusty sukces)
+          </label>
+          <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer; padding: 7px 10px; border: 1px solid var(--border2); border-radius: 3px;">
+            <input type="radio" name="avatar" value="3" style="accent-color: var(--accent);"> Avatar 3 (zdrowotny)
+          </label>
         </div>
-        <span class="format-badge tag-green">post</span>
-      </a>
-      <a class="content-row" href="https://claude.ai/new?q=Napisz+mi+post+FB+na+dzi%C5%9B+%E2%80%94+temat%3A+Alkohol+funkcyjny+%E2%80%94+kiedy+wino+po+pracy+sta%C5%82o+si%C4%99+rytua%C5%82em.+Avatar+1%2C+styl+refleksyjny%2C+struktura+Hook+%E2%86%92+Lustro+%E2%86%92+Osobiste+%E2%86%92+Przemy%C5%9Blenie+%E2%86%92+CTA." target="_blank">
-        <div class="dot dot-today"></div>
-        <div class="row-info">
-          <div class="row-day">Dziś ←</div>
-          <div class="row-topic">Alkohol funkcyjny</div>
-        </div>
-        <span class="format-badge tag-gold">Reel</span>
-      </a>
-      <a class="content-row" href="https://claude.ai/new?q=Napisz+mi+post+FB+o+braku+energii+i+wypaleniu+po+45.+Avatar+1.+Styl%3A+refleksyjny%2C+kr%C3%B3tkie+zdania." target="_blank">
-        <div class="dot dot-plan"></div>
-        <div class="row-info">
-          <div class="row-day">Pt</div>
-          <div class="row-topic">Brak energii / wypalenie</div>
-        </div>
-        <span class="format-badge" style="background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border)">post</span>
-      </a>
-      <a class="content-row" href="https://claude.ai/new?q=Napisz+mi+post+FB+o+zdrowiu+po+45+%E2%80%94+cholesterol%2C+brzuch%2C+stres.+Avatar+3.+Konkretny%2C+bez+paniki." target="_blank">
-        <div class="dot dot-plan"></div>
-        <div class="row-info">
-          <div class="row-day">So</div>
-          <div class="row-topic">Zdrowie — cholesterol, brzuch</div>
-        </div>
-        <span class="format-badge" style="background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border)">post</span>
-      </a>
+      </div>
+
+      <button onclick="generatePost()" style="width:100%; padding: 11px; background: var(--accent); border: none; border-radius: 3px; color: #000; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; margin-bottom: 8px;">
+        ✍ Generuj post →
+      </button>
+
       <a class="action-btn" href="https://claude.ai/new?q=Zaplanuj+mi+content+na+kolejne+2+tygodnie+na+Facebook+%E2%80%94+Transformacja+M%C4%99ska+45%2B.+Mix%3A+posty+tekstowe+i+tematy+na+Reels.+Podaj+w+formie+tabeli%3A+dzie%C5%84%2C+temat%2C+format." target="_blank">
         📅 Zaplanuj kolejne 2 tygodnie →
       </a>
+
+      <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);">
+        <div style="font-size: 10px; font-family: 'DM Mono', monospace; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px;">Szybkie tematy</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+          <button onclick="setTopic('samotność w małżeństwie')" style="font-size:11px; padding: 4px 8px; background: var(--bg3); border: 1px solid var(--border); border-radius: 2px; color: var(--muted); cursor: pointer; font-family: 'Syne', sans-serif;">samotność w małżeństwie</button>
+          <button onclick="setTopic('alkohol funkcyjny')" style="font-size:11px; padding: 4px 8px; background: var(--bg3); border: 1px solid var(--border); border-radius: 2px; color: var(--muted); cursor: pointer; font-family: 'Syne', sans-serif;">alkohol funkcyjny</button>
+          <button onclick="setTopic('brak sensu po 45')" style="font-size:11px; padding: 4px 8px; background: var(--bg3); border: 1px solid var(--border); border-radius: 2px; color: var(--muted); cursor: pointer; font-family: 'Syne', sans-serif;">brak sensu po 45</button>
+          <button onclick="setTopic('wypalenie zawodowe')" style="font-size:11px; padding: 4px 8px; background: var(--bg3); border: 1px solid var(--border); border-radius: 2px; color: var(--muted); cursor: pointer; font-family: 'Syne', sans-serif;">wypalenie zawodowe</button>
+          <button onclick="setTopic('zdrowie cholesterol brzuch')" style="font-size:11px; padding: 4px 8px; background: var(--bg3); border: 1px solid var(--border); border-radius: 2px; color: var(--muted); cursor: pointer; font-family: 'Syne', sans-serif;">zdrowie po 45</button>
+          <button onclick="setTopic('relacja z dziećmi obcość')" style="font-size:11px; padding: 4px 8px; background: var(--bg3); border: 1px solid var(--border); border-radius: 2px; color: var(--muted); cursor: pointer; font-family: 'Syne', sans-serif;">relacja z dziećmi</button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -749,6 +756,34 @@
     closeModal();
     document.getElementById('c-name').value = '';
     document.getElementById('c-age').value = '';
+  }
+
+  function setTopic(topic) {
+    document.getElementById('post-topic').value = topic;
+  }
+
+  function generatePost() {
+    const topic = document.getElementById('post-topic').value.trim();
+    if (!topic) {
+      alert('Wpisz temat posta.');
+      return;
+    }
+    const format = document.querySelector('input[name="format"]:checked').value;
+    const avatar = document.querySelector('input[name="avatar"]:checked').value;
+
+    const avatarDesc = avatar === '1'
+      ? 'Avatar 1 — mężczyzna który zbudował wszystko ale czuje pustkę i brak sensu'
+      : 'Avatar 3 — mężczyzna z impulsem zdrowotnym, cholesterol, brzuch, stres';
+
+    let prompt = '';
+    if (format === 'post') {
+      prompt = `Napisz mi post na Facebook dla mężczyzny po 45 — Transformacja Męska 45+. Temat: ${topic}. ${avatarDesc}. Styl: refleksyjny, krótkie zdania, bez motywacyjnego tonu, bez bullshitu. Struktura: Hook → Lustro czytelnika → Jedno zdanie osobiste → Otwarte przemyślenie → Miękkie CTA (napisz do mnie w wiadomości prywatnej). 900-1500 znaków. Krótkie akapity.`;
+    } else {
+      prompt = `Napisz mi skrypt do Reela na Facebook dla mężczyzny po 45 — Transformacja Męska 45+. Temat: ${topic}. ${avatarDesc}. Styl: mówiony, naturalny, bez motywacyjnego tonu. Struktura: mocny hook (pierwsze 3 sekundy) → problem który zna widz → osobiste nawiązanie → refleksja → miękkie CTA. Max 60 sekund mówienia.`;
+    }
+
+    const url = 'https://claude.ai/new?q=' + encodeURIComponent(prompt);
+    window.open(url, '_blank');
   }
 
   document.getElementById('modal').addEventListener('click', function(e) {
